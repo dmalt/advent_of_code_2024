@@ -33,10 +33,42 @@ def is_good_update(update: list[str], rules: dict[str, set[str]]) -> bool:
     return True
 
 
+def _topo_sort(start, edges, seen, order) -> None:
+    if start in seen:
+        return
+    seen.add(start)
+
+    children = edges.get(start, [])
+
+    for c in children:
+        _topo_sort(c, edges, seen, order)
+
+    order.append(start)
+
+
+def topo_sort(rules: dict[str, set[str]]) -> list[str]:
+    order = []
+    seen = set()
+
+    for r in rules:
+        _topo_sort(r, rules, seen, order)
+    return list(reversed(order))
+
+
 answer1 = 0
+answer2 = 0
 for o in updates:
     rules = get_relevant_rules(o)
     if is_good_update(o, rules):
         answer1 += int(o[len(o) // 2])
+    else:
+        # print(f"{rules=}")
+        # print(f"{o=}")
+        # print(f"{topo_sort(rules)=}")
+        o_sort = topo_sort(rules)
+        assert len(o_sort) == len(o)
+        answer2 += int(o_sort[len(o) // 2])
+
 
 print(f"{answer1=}")
+print(f"{answer2=}")
