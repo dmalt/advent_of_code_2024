@@ -2,7 +2,6 @@ from copy import deepcopy
 
 # input = "input_small.txt"
 input = "input_large.txt"
-# input = "input_very_small.txt"
 
 with open(input) as f:
     labyrinth = list(map(lambda x: list(x.strip()), f))
